@@ -11,7 +11,7 @@ import { MdGraphicEq } from "react-icons/md";
 import { IoPlayBackOutline, IoPlayForwardOutline } from "react-icons/io5";
 import { TbRewindBackward5, TbRewindForward5 } from "react-icons/tb";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import TryOut from "../assets/TryOut.svg";
+import TryOut from "./TryOut.svg";
 import { BsFillPlayFill, BsPauseFill } from "react-icons/bs";
 
 function Editor() {
