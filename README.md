@@ -16,4 +16,4 @@ Video rendered on HTML5 canvas, with additional custom 5 second skip && rewind b
 
 UI: Designed in Figma. Tools: WebStorm IDE, FireFox, Chrome.
 
-<img width="1470" alt="image" src="https://github.com/alwinsDen/VidyoAI-assignment/assets/75517758/ed44f803-7c37-4c54-915a-d99c28baaa38">
+<img width="1470" alt="image" src="https://github.com/alwinsDen/VidyoAI-assignment/assets/75517758/1eedb965-cad3-4c8b-a4c2-b04fd8169ebf">
