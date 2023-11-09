@@ -1,0 +1,12 @@
+.uploadVideo{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 7.719px;
+  background: #64CAE0;
+  padding: 10px;
+  color: #ffffff;
+  &:disabled {
+    background: #4d705c;
+  }
+}

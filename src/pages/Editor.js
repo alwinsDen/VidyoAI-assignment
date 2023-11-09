@@ -13,6 +13,7 @@ import { TbRewindBackward5, TbRewindForward5 } from "react-icons/tb";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import TryOut from "./TryOut.svg";
 import { BsFillPlayFill, BsPauseFill } from "react-icons/bs";
+import "./Editor.scss";
 
 function Editor() {
   const [videoSrc, setVideoSrc] = useState(null);
@@ -173,6 +174,12 @@ function Editor() {
     video.currentTime = Math.min(video.duration, video.currentTime + 5);
   };
 
+  function toMMSS(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${min.toString().padStart(2, "0")}:${sec.toFixed(0).toString()}`;
+  }
+
   return (
     <div
       style={{
@@ -280,6 +287,7 @@ function Editor() {
             <button>
               <TbRewindBackward5 onClick={moveBackward} />
             </button>
+            <p>0:00</p>
             <Slider
               aria-label="slider-ex-4"
               value={videoRef.current?.currentTime || 0}
@@ -294,6 +302,7 @@ function Editor() {
                 <Box color="tomato" as={MdGraphicEq} />
               </SliderThumb>
             </Slider>
+            <p>{toMMSS(videoMetadata.duration.toFixed(2))}</p>
             <button>
               <TbRewindForward5 onClick={moveForward} />
             </button>
@@ -355,18 +364,11 @@ function Editor() {
           }}
         >
           <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              borderRadius: "7.719px",
-              background: "#64CAE0",
-              padding: "10px",
-              color: "#ffffff",
-            }}
+            className={"uploadVideo"}
             onClick={() => {
               fileSelectUserRef.current.click();
             }}
+            disabled={videoMetadata.duration !== 0}
           >
             <AiOutlineCloudUpload />
             <p
@@ -374,7 +376,9 @@ function Editor() {
                 fontWeight: 600,
               }}
             >
-              Upload Video
+              {videoMetadata.duration !== 0
+                ? "Video uploaded!!"
+                : "Upload Video"}
             </p>
           </button>
           <p
@@ -384,6 +388,18 @@ function Editor() {
             }}
           >
             Upload Video in .mp4 format.
+            <span>
+              {videoMetadata.duration !== 0 ? (
+                <a href={"self"}>
+                  &nbsp;
+                  <i>
+                    <u>Reload</u>
+                  </i>
+                </a>
+              ) : (
+                ""
+              )}
+            </span>
           </p>
         </div>
         {videoSrc && (
