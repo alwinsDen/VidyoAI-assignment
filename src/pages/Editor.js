@@ -5,7 +5,7 @@ import {
   Slider,
   SliderFilledTrack,
   SliderThumb,
-  SliderTrack,
+  SliderTrack, Spinner,
 } from "@chakra-ui/react";
 import { MdGraphicEq } from "react-icons/md";
 import { IoPlayBackOutline, IoPlayForwardOutline } from "react-icons/io5";
@@ -25,6 +25,7 @@ function Editor() {
   const [isPlaying, setIsPlaying] = useState(false);
   const fileSelectUserRef = useRef(null);
   const [audioPresent, setAudioPresent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     videoRef.current = document.createElement("video");
@@ -63,6 +64,7 @@ function Editor() {
       setVideoSrc(url);
       // video.load();
       video.onloadedmetadata = () => {
+        setIsLoading(true);
         const audioContext = new (window.AudioContext ||
             window.webkitAudioContext)();
         const source = audioContext.createMediaElementSource(video);
@@ -119,11 +121,13 @@ function Editor() {
                   .end(0)
                   .toFixed(2)}`,
             });
+            setIsLoading(false);
           } else{
             toast.error("The uploaded video has no Audio. Please try again.");
+            setIsLoading(false);
             setTimeout(()=>{window.location.reload()}, 3000)
           }
-        }, 1000)
+        }, 3000)
       };
       const audioContext = new (window.AudioContext ||
         window.webkitAudioContext)();
@@ -237,6 +241,30 @@ function Editor() {
         alignItems: "center",
       }}
     >
+      {
+          isLoading && <div
+            style={{
+              height: "100vh",
+              width: "100vw",
+              display:"flex",
+              justifyContent:"center",
+              alignItems:"center",
+              position: "fixed",
+              top: 0,
+              left: 0,
+              backdropFilter: "blur(10px)",
+              zIndex: 10
+            }}
+          >
+            <Spinner
+                thickness='4px'
+                speed='0.65s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+            />
+          </div>
+      }
       <div
         style={{
           height: "100%",
