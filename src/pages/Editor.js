@@ -23,6 +23,7 @@ function Editor() {
   const wavesurferRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const fileSelectUserRef = useRef(null);
+  const [audioPresent, setAudioPresent] = useState(false);
 
   useEffect(() => {
     videoRef.current = document.createElement("video");
@@ -59,23 +60,51 @@ function Editor() {
       console.log("Here is the file", url);
       video.src = url;
       setVideoSrc(url);
-      video.load();
+      // video.load();
+
       video.onloadedmetadata = () => {
-        function hasAudio(video) {
-          return (
-            video.mozHasAudio ||
-            Boolean(video.webkitAudioDecodedByteCount) ||
-            Boolean(video.audioTracks && video.audioTracks.length)
-          );
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const source = audioContext.createMediaElementSource(video);
+        const analyser = audioContext.createAnalyser();
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+        analyser.fftSize = 2048;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        let audioPres = false;
+
+        function hasAudio() {
+          analyser.getByteFrequencyData(dataArray);
+          const sum = dataArray.reduce((a, value) => a + value, 0);
+          return sum > 0;
         }
 
-        video.addEventListener("loadeddata", () => {
-          if (hasAudio(video)) {
-            console.log("video has audio");
-          } else {
-            console.log("video doesn't have audio");
+        video.addEventListener("timeupdate", () => {
+          if (!audioPres) {
+            if (hasAudio()) {
+              console.log("video has audio");
+              audioPres = true;
+              if (audioPres) {
+                video.currentTime = 0;
+                video.addEventListener("seeked", function drawThumbnail() {
+                  drawVideoFrame();
+                  video.pause();
+                  video.removeEventListener("seeked", drawThumbnail);
+                });
+              }
+            } else {
+              console.log("video doesn't have audio");
+              video.pause();
+              setVideoMetadata({ duration: 0 });
+              URL.revokeObjectURL(url);
+              setVideoSrc(null);
+            }
           }
         });
+        video.mute = true;
+        video.play();
+        video.mute = false;
 
         setVideoMetadata({
           duration: video.duration,
@@ -85,12 +114,6 @@ function Editor() {
           range: `${video.seekable.start(0)} - ${video.seekable
             .end(0)
             .toFixed(2)}`,
-        });
-        video.currentTime = 0;
-        video.addEventListener("seeked", function drawThumbnail() {
-          drawVideoFrame();
-          video.pause();
-          video.removeEventListener("seeked", drawThumbnail);
         });
       };
       const audioContext = new (window.AudioContext ||
