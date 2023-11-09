@@ -120,7 +120,8 @@ function Editor() {
                   .toFixed(2)}`,
             });
           } else{
-            toast.error("The uploaded video has no Audio. Please try again.")
+            toast.error("The uploaded video has no Audio. Please try again.");
+            setTimeout(()=>{window.location.reload()}, 3000)
           }
         }, 1000)
       };
