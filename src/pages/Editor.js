@@ -61,6 +61,22 @@ function Editor() {
       setVideoSrc(url);
       video.load();
       video.onloadedmetadata = () => {
+        function hasAudio(video) {
+          return (
+            video.mozHasAudio ||
+            Boolean(video.webkitAudioDecodedByteCount) ||
+            Boolean(video.audioTracks && video.audioTracks.length)
+          );
+        }
+
+        video.addEventListener("loadeddata", () => {
+          if (hasAudio(video)) {
+            console.log("video has audio");
+          } else {
+            console.log("video doesn't have audio");
+          }
+        });
+
         setVideoMetadata({
           duration: video.duration,
           height: video.videoHeight,
