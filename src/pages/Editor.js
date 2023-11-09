@@ -109,20 +109,19 @@ function Editor() {
               video.pause();
               video.removeEventListener("seeked", drawThumbnail);
             });
+            setVideoMetadata({
+              duration: video.duration,
+              height: video.videoHeight,
+              width: video.videoWidth,
+              aspectRatio: video.videoWidth / video.videoHeight,
+              range: `${video.seekable.start(0)} - ${video.seekable
+                  .end(0)
+                  .toFixed(2)}`,
+            });
           } else{
             toast.error("The uploaded video has no Audio. Please try again.")
           }
         }, 1000)
-
-        setVideoMetadata({
-          duration: video.duration,
-          height: video.videoHeight,
-          width: video.videoWidth,
-          aspectRatio: video.videoWidth / video.videoHeight,
-          range: `${video.seekable.start(0)} - ${video.seekable
-            .end(0)
-            .toFixed(2)}`,
-        });
       };
       const audioContext = new (window.AudioContext ||
         window.webkitAudioContext)();
