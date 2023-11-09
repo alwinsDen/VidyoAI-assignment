@@ -14,6 +14,7 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import TryOut from "./TryOut.svg";
 import { BsFillPlayFill, BsPauseFill } from "react-icons/bs";
 import "./Editor.scss";
+import { toast } from "react-toastify";
 
 function Editor() {
   const [videoSrc, setVideoSrc] = useState(null);
@@ -99,6 +100,9 @@ function Editor() {
               setVideoMetadata({ duration: 0 });
               URL.revokeObjectURL(url);
               setVideoSrc(null);
+              toast.error(
+                "No AUDIO present in the upload clip. Please re-upload.",
+              );
             }
           }
         });
