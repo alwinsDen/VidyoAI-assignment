@@ -103,6 +103,7 @@ function Editor() {
         setTimeout(()=>{
           video.pause();
           if (audioPres) {
+            gainNode.gain.value = 1
             video.currentTime = 0;
             video.addEventListener("seeked", function drawThumbnail() {
               drawVideoFrame();
