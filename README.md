@@ -2,6 +2,8 @@
 
 Vercel: https://vidyo-ai-assignment-w8ld.vercel.app/
 
+**TESTED BROWSERS:** Chrome, Brave, FireFox, Safari
+
 Created With Htm5 canvas, React, Wavesurfer.js. 
 
 Video rendered on HTML5 canvas, with additional custom 5 second skip && rewind buttons. 
